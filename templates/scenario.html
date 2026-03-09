@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scenario – FinLiteracy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon-sm">₹</div>
+            <span>FinLiteracy</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="/scenario" class="nav-item active">
+                <span class="nav-icon">🎮</span> Scenarios
+            </a>
+            <a href="/learning" class="nav-item">
+                <span class="nav-icon">📚</span> Learning Path
+            </a>
+            <a href="/mentor" class="nav-item">
+                <span class="nav-icon">🤖</span> AI Mentor
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="streak-badge">🔥 {{ user.streak_days }} day streak</div>
+            <a href="/logout" class="nav-item nav-logout">
+                <span class="nav-icon">👋</span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h2 class="page-title">🎮 Financial Scenarios</h2>
+                <p class="page-subtitle">Make smart decisions. Earn XP. Build real skills.</p>
+            </div>
+            <div class="header-coins">
+                <span class="coin-display">🪙 {{ user.coins }} coins</span>
+                <span class="coin-display xp-display">⚡ {{ user.xp }} XP</span>
+            </div>
+        </header>
+
+        <!-- Scenario Card -->
+        <div class="scenario-wrap">
+            <div class="scenario-card" id="scenario-main">
+                <div class="scenario-meta">
+                    <span class="scenario-tag">Monthly Allowance Challenge</span>
+                    <span class="scenario-difficulty">⭐⭐ Medium</span>
+                </div>
+
+                <div class="scenario-question">
+                    <div class="scenario-avatar">💼</div>
+                    <h2 class="scenario-title">You just received your monthly allowance of ₹10,000.</h2>
+                    <p class="scenario-desc">
+                        This is your entire budget for the month. You have bills, wants, and future goals 
+                        to consider. How will you <strong>primarily allocate</strong> this money?
+                    </p>
+                </div>
+
+                <div class="scenario-options" id="scenario-options">
+                    <button class="scenario-btn" onclick="makeChoice('lifestyle', this)">
+                        <div class="option-icon">🛍️</div>
+                        <div class="option-content">
+                            <strong>Spend on Lifestyle</strong>
+                            <p>Entertainment, clothes, dining out, gadgets</p>
+                        </div>
+                        <div class="option-reward low">+30 XP</div>
+                    </button>
+
+                    <button class="scenario-btn" onclick="makeChoice('save', this)">
+                        <div class="option-icon">🏦</div>
+                        <div class="option-content">
+                            <strong>Save for the Future</strong>
+                            <p>Put 30%+ into a savings account for goals</p>
+                        </div>
+                        <div class="option-reward medium">+150 XP</div>
+                    </button>
+
+                    <button class="scenario-btn" onclick="makeChoice('invest', this)">
+                        <div class="option-icon">📈</div>
+                        <div class="option-content">
+                            <strong>Start Investing</strong>
+                            <p>SIP in mutual funds or index funds</p>
+                        </div>
+                        <div class="option-reward high">+200 XP</div>
+                    </button>
+
+                    <button class="scenario-btn" onclick="makeChoice('emergency', this)">
+                        <div class="option-icon">🛡️</div>
+                        <div class="option-content">
+                            <strong>Build Emergency Fund</strong>
+                            <p>Save 3–6 months of expenses as a safety net</p>
+                        </div>
+                        <div class="option-reward medium">+120 XP</div>
+                    </button>
+                </div>
+
+                <!-- Result panel (hidden initially) -->
+                <div class="scenario-result hidden" id="scenario-result">
+                    <div class="result-header">
+                        <div class="result-emoji" id="result-emoji">🎉</div>
+                        <h3 class="result-message" id="result-message">Great choice!</h3>
+                    </div>
+                    <div class="result-rewards" id="result-rewards">
+                        <div class="reward-chip" id="reward-xp">⚡ +0 XP</div>
+                        <div class="reward-chip" id="reward-coins">🪙 +0 Coins</div>
+                    </div>
+                    <div class="result-explanation" id="result-explanation"></div>
+                    <div class="result-actions">
+                        <button class="btn btn-primary" onclick="nextScenario()">Next Scenario →</button>
+                        <a href="/dashboard" class="btn btn-outline">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 2 (hidden, loads after first) -->
+            <div class="scenario-card hidden" id="scenario-2">
+                <div class="scenario-meta">
+                    <span class="scenario-tag">Unexpected Expense Challenge</span>
+                    <span class="scenario-difficulty">⭐⭐⭐ Hard</span>
+                </div>
+                <div class="scenario-question">
+                    <div class="scenario-avatar">🚗</div>
+                    <h2 class="scenario-title">Your scooter broke down. Repairs cost ₹4,000.</h2>
+                    <p class="scenario-desc">
+                        You didn't expect this expense. Your savings are ₹2,000 and you 
+                        have ₹3,000 left this month. What do you do?
+                    </p>
+                </div>
+                <div class="scenario-options" id="scenario-2-options">
+                    <button class="scenario-btn" onclick="makeChoice2('credit', this)">
+                        <div class="option-icon">💳</div>
+                        <div class="option-content">
+                            <strong>Use Credit Card</strong>
+                            <p>Pay now, deal with interest later</p>
+                        </div>
+                        <div class="option-reward low">+20 XP</div>
+                    </button>
+                    <button class="scenario-btn" onclick="makeChoice2('emergency2', this)">
+                        <div class="option-icon">🛡️</div>
+                        <div class="option-content">
+                            <strong>Use Emergency Fund</strong>
+                            <p>This is exactly what it's for!</p>
+                        </div>
+                        <div class="option-reward high">+180 XP</div>
+                    </button>
+                    <button class="scenario-btn" onclick="makeChoice2('borrow', this)">
+                        <div class="option-icon">🤝</div>
+                        <div class="option-content">
+                            <strong>Borrow from Family</strong>
+                            <p>Ask for a short-term loan with a repayment plan</p>
+                        </div>
+                        <div class="option-reward medium">+80 XP</div>
+                    </button>
+                    <button class="scenario-btn" onclick="makeChoice2('delay', this)">
+                        <div class="option-icon">⏳</div>
+                        <div class="option-content">
+                            <strong>Delay the repair</strong>
+                            <p>Save up over 2 months before repairing</p>
+                        </div>
+                        <div class="option-reward medium">+100 XP</div>
+                    </button>
+                </div>
+                <div class="scenario-result hidden" id="scenario-2-result">
+                    <div class="result-header">
+                        <div class="result-emoji" id="result-2-emoji">🎉</div>
+                        <h3 class="result-message" id="result-2-message"></h3>
+                    </div>
+                    <div class="result-rewards">
+                        <div class="reward-chip" id="reward-2-xp">⚡ +0 XP</div>
+                        <div class="reward-chip" id="reward-2-coins">🪙 +0 Coins</div>
+                    </div>
+                    <div class="result-explanation" id="result-2-explanation"></div>
+                    <div class="result-actions">
+                        <a href="/learning" class="btn btn-primary">Go to Learning Path →</a>
+                        <a href="/dashboard" class="btn btn-outline">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips sidebar -->
+            <div class="scenario-tips">
+                <h4>💡 Financial Tips</h4>
+                <div class="tip-item">
+                    <strong>50/30/20 Rule</strong>
+                    <p>50% needs, 30% wants, 20% savings</p>
+                </div>
+                <div class="tip-item">
+                    <strong>Pay Yourself First</strong>
+                    <p>Save before you spend, not after</p>
+                </div>
+                <div class="tip-item">
+                    <strong>Compound Interest</strong>
+                    <p>Investing early = growing wealth exponentially</p>
+                </div>
+                <div class="tip-item">
+                    <strong>Emergency Fund</strong>
+                    <p>3–6 months of expenses in liquid savings</p>
+                </div>
+                <!-- TODO: Dynamically load tips relevant to current scenario -->
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Scenario-specific logic is in script.js
+        // TODO: Load scenarios dynamically from /api/scenarios endpoint
+    </script>
+</body>
+</html>

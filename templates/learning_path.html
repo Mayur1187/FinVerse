@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Path – FinLiteracy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon-sm">₹</div>
+            <span>FinLiteracy</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="/scenario" class="nav-item">
+                <span class="nav-icon">🎮</span> Scenarios
+            </a>
+            <a href="/learning" class="nav-item active">
+                <span class="nav-icon">📚</span> Learning Path
+            </a>
+            <a href="/mentor" class="nav-item">
+                <span class="nav-icon">🤖</span> AI Mentor
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="streak-badge">🔥 {{ user.streak_days }} day streak</div>
+            <a href="/logout" class="nav-item nav-logout">
+                <span class="nav-icon">👋</span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h2 class="page-title">📚 Your Learning Path</h2>
+                <p class="page-subtitle">Master personal finance step by step. Unlock levels as you grow.</p>
+            </div>
+            <div class="header-coins">
+                <span class="coin-display">🪙 {{ user.coins }} coins</span>
+            </div>
+        </header>
+
+        <!-- Overall progress bar -->
+        <div class="card overall-progress-card">
+            <div class="op-left">
+                <h3>Overall Progress</h3>
+                <p>You've completed 2 out of 5 financial literacy levels</p>
+            </div>
+            <div class="op-right">
+                <div class="big-progress-track">
+                    <div class="big-progress-fill" style="width: 40%"></div>
+                </div>
+                <span class="op-percent">40%</span>
+            </div>
+            <!-- TODO: Calculate real progress from user's progress record -->
+        </div>
+
+        <!-- Learning Path Roadmap -->
+        <div class="learning-path">
+
+            <!-- Level 1 - Completed -->
+            <div class="path-connector"></div>
+            <div class="level-card level-complete">
+                <div class="level-status">
+                    <div class="level-dot dot-complete">✓</div>
+                </div>
+                <div class="level-content">
+                    <div class="level-header">
+                        <div class="level-icon">💰</div>
+                        <div class="level-title-wrap">
+                            <span class="level-num">Level 1</span>
+                            <h3 class="level-title">Budgeting Basics</h3>
+                        </div>
+                        <span class="level-badge badge-complete">✅ Completed</span>
+                    </div>
+                    <p class="level-desc">Learn how to track income vs expenses, understand the 50/30/20 rule, and create your first monthly budget.</p>
+                    <div class="level-topics">
+                        <span class="topic-chip done">📋 Income & Expenses</span>
+                        <span class="topic-chip done">📊 50/30/20 Rule</span>
+                        <span class="topic-chip done">🗓️ Monthly Budget</span>
+                        <span class="topic-chip done">📱 Budget Apps</span>
+                    </div>
+                    <div class="level-footer">
+                        <span class="level-xp">⚡ 300 XP earned</span>
+                        <a href="/scenario" class="btn btn-sm btn-outline">Review</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level 2 - In Progress -->
+            <div class="path-connector"></div>
+            <div class="level-card level-active">
+                <div class="level-status">
+                    <div class="level-dot dot-active">2</div>
+                </div>
+                <div class="level-content">
+                    <div class="level-header">
+                        <div class="level-icon">🏦</div>
+                        <div class="level-title-wrap">
+                            <span class="level-num">Level 2</span>
+                            <h3 class="level-title">Saving Strategies</h3>
+                        </div>
+                        <span class="level-badge badge-active">🔄 In Progress</span>
+                    </div>
+                    <p class="level-desc">Discover saving techniques like pay yourself first, high-yield savings, and goal-based saving buckets.</p>
+                    <div class="level-topics">
+                        <span class="topic-chip done">💡 Pay Yourself First</span>
+                        <span class="topic-chip active">🎯 Goal-Based Saving</span>
+                        <span class="topic-chip locked">🔒 High-Yield Accounts</span>
+                        <span class="topic-chip locked">🔒 Saving Automations</span>
+                    </div>
+                    <div class="level-progress-mini">
+                        <div class="mini-track">
+                            <div class="mini-fill" style="width: 50%"></div>
+                        </div>
+                        <span>2 / 4 topics</span>
+                    </div>
+                    <div class="level-footer">
+                        <span class="level-xp">⚡ 150 XP so far</span>
+                        <a href="/scenario" class="btn btn-sm btn-primary">Continue →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level 3 - Locked -->
+            <div class="path-connector connector-locked"></div>
+            <div class="level-card level-locked">
+                <div class="level-status">
+                    <div class="level-dot dot-locked">🔒</div>
+                </div>
+                <div class="level-content">
+                    <div class="level-header">
+                        <div class="level-icon">💳</div>
+                        <div class="level-title-wrap">
+                            <span class="level-num">Level 3</span>
+                            <h3 class="level-title">Debt Management</h3>
+                        </div>
+                        <span class="level-badge badge-locked">🔒 Locked</span>
+                    </div>
+                    <p class="level-desc">Understand good vs bad debt, repayment strategies like avalanche & snowball, and how credit scores work.</p>
+                    <div class="level-topics">
+                        <span class="topic-chip locked">🔒 Good vs Bad Debt</span>
+                        <span class="topic-chip locked">🔒 Avalanche Method</span>
+                        <span class="topic-chip locked">🔒 Snowball Method</span>
+                        <span class="topic-chip locked">🔒 Credit Score</span>
+                    </div>
+                    <div class="level-footer">
+                        <span class="unlock-hint">Complete Level 2 to unlock</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level 4 - Locked -->
+            <div class="path-connector connector-locked"></div>
+            <div class="level-card level-locked">
+                <div class="level-status">
+                    <div class="level-dot dot-locked">🔒</div>
+                </div>
+                <div class="level-content">
+                    <div class="level-header">
+                        <div class="level-icon">📈</div>
+                        <div class="level-title-wrap">
+                            <span class="level-num">Level 4</span>
+                            <h3 class="level-title">Investing Basics</h3>
+                        </div>
+                        <span class="level-badge badge-locked">🔒 Locked</span>
+                    </div>
+                    <p class="level-desc">Learn mutual funds, SIPs, stocks, and how compound interest makes your money grow exponentially.</p>
+                    <div class="level-topics">
+                        <span class="topic-chip locked">🔒 Mutual Funds</span>
+                        <span class="topic-chip locked">🔒 SIP Investing</span>
+                        <span class="topic-chip locked">🔒 Stock Market Basics</span>
+                        <span class="topic-chip locked">🔒 Compound Interest</span>
+                    </div>
+                    <div class="level-footer">
+                        <span class="unlock-hint">Complete Level 3 to unlock</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level 5 - Locked -->
+            <div class="path-connector connector-locked"></div>
+            <div class="level-card level-locked level-final">
+                <div class="level-status">
+                    <div class="level-dot dot-locked">🔒</div>
+                </div>
+                <div class="level-content">
+                    <div class="level-header">
+                        <div class="level-icon">🏆</div>
+                        <div class="level-title-wrap">
+                            <span class="level-num">Level 5</span>
+                            <h3 class="level-title">Financial Independence</h3>
+                        </div>
+                        <span class="level-badge badge-locked badge-gold">🏆 Final Boss</span>
+                    </div>
+                    <p class="level-desc">Understand FIRE movement, passive income, net worth tracking, and building long-term wealth for freedom.</p>
+                    <div class="level-topics">
+                        <span class="topic-chip locked">🔒 FIRE Movement</span>
+                        <span class="topic-chip locked">🔒 Passive Income</span>
+                        <span class="topic-chip locked">🔒 Net Worth</span>
+                        <span class="topic-chip locked">🔒 Wealth Mindset</span>
+                    </div>
+                    <div class="level-footer">
+                        <span class="unlock-hint">Complete all levels to unlock 🌟</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

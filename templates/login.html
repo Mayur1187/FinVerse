@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinLiteracy – Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+
+    <div class="login-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="brand-icon">₹</div>
+                <h1 class="brand-name">FinLiteracy</h1>
+                <p class="brand-tagline">Level up your money game 🚀</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">
+                ⚠️ {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/login" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-input" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    Login & Start Learning
+                </button>
+            </form>
+
+            <div class="login-demo-hint">
+                <span>🎮 Demo credentials:</span>
+                <code>demo / demo123</code>
+            </div>
+
+            <p class="login-signup">
+                New here? <a href="#">Create an account</a> — it's free!
+                <!-- TODO: Wire up registration flow -->
+            </p>
+        </div>
+
+        <div class="login-features">
+            <div class="feature-pill">🏆 Earn XP & Badges</div>
+            <div class="feature-pill">💡 AI Financial Mentor</div>
+            <div class="feature-pill">🎯 Real Scenarios</div>
+            <div class="feature-pill">📊 Track Progress</div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard – FinLiteracy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon-sm">₹</div>
+            <span>FinLiteracy</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item active">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="/scenario" class="nav-item">
+                <span class="nav-icon">🎮</span> Scenarios
+            </a>
+            <a href="/learning" class="nav-item">
+                <span class="nav-icon">📚</span> Learning Path
+            </a>
+            <a href="/mentor" class="nav-item">
+                <span class="nav-icon">🤖</span> AI Mentor
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <!-- Streak indicator -->
+            <div class="streak-badge">
+                🔥 {{ user.streak_days }} day streak
+            </div>
+            <a href="/logout" class="nav-item nav-logout">
+                <span class="nav-icon">👋</span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h2 class="page-title">Welcome back, <span class="highlight">{{ user.username }}</span>! 👋</h2>
+                <p class="page-subtitle">You're on a {{ user.streak_days }}-day learning streak. Keep it up!</p>
+            </div>
+            <div class="header-coins">
+                <span class="coin-display">🪙 {{ user.coins }} coins</span>
+            </div>
+        </header>
+
+        <!-- Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card stat-blue">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ user.xp }}</span>
+                    <span class="stat-label">Total XP</span>
+                </div>
+            </div>
+            <div class="stat-card stat-green">
+                <div class="stat-icon">🏅</div>
+                <div class="stat-info">
+                    <span class="stat-value">Level {{ user.level }}</span>
+                    <span class="stat-label">Current Level</span>
+                </div>
+            </div>
+            <div class="stat-card stat-teal">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ progress.scenarios_completed }}</span>
+                    <span class="stat-label">Scenarios Done</span>
+                </div>
+            </div>
+            <div class="stat-card stat-orange">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ progress.financial_score | int }}%</span>
+                    <span class="stat-label">Finance Score</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Left column -->
+            <div class="col-left">
+
+                <!-- XP Progress -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">⚡ XP Progress</h3>
+                        <span class="card-badge">Level {{ user.level }} → {{ user.level + 1 }}</span>
+                    </div>
+                    <div class="xp-bar-wrap">
+                        <div class="xp-bar">
+                            <div class="xp-fill" style="width: {{ xp_percent }}%"></div>
+                        </div>
+                        <div class="xp-labels">
+                            <span>{{ user.xp % xp_for_next }} XP</span>
+                            <span>{{ xp_for_next }} XP needed</span>
+                        </div>
+                    </div>
+                    <p class="xp-tip">Complete scenarios to earn more XP and level up! 🚀</p>
+                </div>
+
+                <!-- Daily Challenge -->
+                <div class="card card-highlight">
+                    <div class="card-header">
+                        <h3 class="card-title">🔥 Daily Challenge</h3>
+                        <span class="badge badge-new">NEW</span>
+                    </div>
+                    <div class="challenge-content">
+                        <p class="challenge-title">Budget Breakdown Challenge</p>
+                        <p class="challenge-desc">Allocate a ₹15,000 salary across 5 expense categories optimally.</p>
+                        <div class="challenge-reward">
+                            <span>🪙 +200 coins</span>
+                            <span>⚡ +300 XP</span>
+                            <span>⏰ 23:14:05 left</span>
+                        </div>
+                    </div>
+                    <a href="/scenario" class="btn btn-primary">Accept Challenge</a>
+                    <!-- TODO: Link to specific daily challenge scenario -->
+                </div>
+
+                <!-- Financial Health Score -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💚 Financial Health Score</h3>
+                        <span class="score-badge">{{ progress.financial_score | int }}/100</span>
+                    </div>
+                    <!-- Dummy bar chart using CSS -->
+                    <div class="health-chart">
+                        <div class="chart-bar-group">
+                            <div class="chart-label">Budgeting</div>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 85%">85%</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-label">Saving</div>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 60%">60%</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-label">Investing</div>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill cb-orange" style="width: 30%">30%</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-label">Debt Mgmt</div>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill cb-teal" style="width: 45%">45%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- TODO: Replace with Chart.js or D3 for real interactive chart -->
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-right">
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h3 class="card-title" style="margin-bottom:1rem;">🚀 Quick Actions</h3>
+                    <div class="actions-grid">
+                        <a href="/scenario?type=budget" class="action-btn">
+                            <div class="action-icon">💰</div>
+                            <span>Budget Challenge</span>
+                        </a>
+                        <a href="/scenario?type=saving" class="action-btn">
+                            <div class="action-icon">🏦</div>
+                            <span>Saving Simulator</span>
+                        </a>
+                        <a href="/scenario?type=invest" class="action-btn">
+                            <div class="action-icon">📈</div>
+                            <span>Investment Game</span>
+                        </a>
+                        <a href="/mentor" class="action-btn action-btn-special">
+                            <div class="action-icon">🤖</div>
+                            <span>AI Mentor</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🏆 Badges Earned</h3>
+                        <a href="#" class="card-link">View all</a>
+                    </div>
+                    <div class="badges-grid">
+                        <div class="badge-item earned" title="First Save">
+                            <div class="badge-icon">💰</div>
+                            <span>First Save</span>
+                        </div>
+                        <div class="badge-item earned" title="Budget Master">
+                            <div class="badge-icon">📊</div>
+                            <span>Budget Pro</span>
+                        </div>
+                        <div class="badge-item earned" title="3-day streak">
+                            <div class="badge-icon">🔥</div>
+                            <span>Streak 3</span>
+                        </div>
+                        <div class="badge-item locked" title="Locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>Investor</span>
+                        </div>
+                        <div class="badge-item locked" title="Locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>Debt Free</span>
+                        </div>
+                        <div class="badge-item locked" title="Locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>Rich Mind</span>
+                        </div>
+                    </div>
+                    <!-- TODO: Fetch earned badges from user.progress.badges_earned -->
+                </div>
+
+                <!-- Leaderboard (placeholder) -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🏅 Leaderboard</h3>
+                        <span class="badge badge-soon">This week</span>
+                    </div>
+                    <div class="leaderboard-list">
+                        <div class="leaderboard-item">
+                            <span class="rank rank-gold">🥇</span>
+                            <span class="lb-name">aryan_k</span>
+                            <span class="lb-xp">4,200 XP</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="rank rank-silver">🥈</span>
+                            <span class="lb-name">priya_m</span>
+                            <span class="lb-xp">3,850 XP</span>
+                        </div>
+                        <div class="leaderboard-item leaderboard-you">
+                            <span class="rank">🏅</span>
+                            <span class="lb-name">{{ user.username }} (you)</span>
+                            <span class="lb-xp">{{ user.xp }} XP</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="rank">4</span>
+                            <span class="lb-name">rahul_99</span>
+                            <span class="lb-xp">980 XP</span>
+                        </div>
+                    </div>
+                    <!-- TODO: Query real leaderboard from DB sorted by XP -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Animate countdown timer for daily challenge
+        startCountdown();
+    </script>
+</body>
+</html>

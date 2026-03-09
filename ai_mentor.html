@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mentor – FinLiteracy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon-sm">₹</div>
+            <span>FinLiteracy</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="/scenario" class="nav-item">
+                <span class="nav-icon">🎮</span> Scenarios
+            </a>
+            <a href="/learning" class="nav-item">
+                <span class="nav-icon">📚</span> Learning Path
+            </a>
+            <a href="/mentor" class="nav-item active">
+                <span class="nav-icon">🤖</span> AI Mentor
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="streak-badge">🔥 {{ user.streak_days }} day streak</div>
+            <a href="/logout" class="nav-item nav-logout">
+                <span class="nav-icon">👋</span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h2 class="page-title">🤖 AI Financial Mentor</h2>
+                <p class="page-subtitle">Ask me anything about money, budgeting, saving, or investing!</p>
+            </div>
+        </header>
+
+        <div class="mentor-layout">
+            <!-- Chat Area -->
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="mentor-avatar">🤖</div>
+                    <div class="mentor-info">
+                        <strong>FinBot</strong>
+                        <span class="mentor-status">● Online</span>
+                    </div>
+                    <!-- TODO: Add option to switch AI personalities (strict, friendly, coach) -->
+                </div>
+
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Welcome message -->
+                    <div class="message message-bot">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-bubble">
+                            <p>Hi {{ user.username }}! 👋 I'm FinBot, your personal AI financial mentor.</p>
+                            <p>I can help you with <strong>budgeting, saving, investing, debt management</strong>, and more. What's on your mind?</p>
+                        </div>
+                    </div>
+
+                    <div class="message message-bot">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-bubble">
+                            <p>Try asking me things like:</p>
+                            <ul>
+                                <li>How do I start saving?</li>
+                                <li>What is a SIP investment?</li>
+                                <li>How can I get out of debt?</li>
+                                <li>Explain emergency funds</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Dynamic messages will be appended here via JS -->
+                </div>
+
+                <!-- Typing indicator (hidden by default) -->
+                <div class="typing-indicator hidden" id="typing">
+                    <div class="message-avatar">🤖</div>
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <!-- Chat input -->
+                <div class="chat-input-area">
+                    <input
+                        type="text"
+                        id="chat-input"
+                        class="chat-input"
+                        placeholder="Ask a financial question..."
+                        onkeypress="handleEnter(event)"
+                    />
+                    <button class="chat-send-btn" onclick="sendMessage()">
+                        Send ➤
+                    </button>
+                </div>
+                <!--
+                    TODO: AI API Integration Point
+                    Replace the /mentor/chat dummy endpoint with:
+                    
+                    Option A - OpenAI:
+                        import openai
+                        client = openai.OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+                        response = client.chat.completions.create(
+                            model="gpt-4o-mini",
+                            messages=[{"role": "user", "content": user_message}],
+                            system="You are a financial literacy mentor for Indian youth..."
+                        )
+                    
+                    Option B - Google Gemini:
+                        import google.generativeai as genai
+                        genai.configure(api_key=os.environ['GEMINI_API_KEY'])
+                        model = genai.GenerativeModel('gemini-pro')
+                        response = model.generate_content(user_message)
+                    
+                    Option C - Anthropic Claude:
+                        import anthropic
+                        client = anthropic.Anthropic(api_key=os.environ['ANTHROPIC_API_KEY'])
+                        message = client.messages.create(...)
+                -->
+            </div>
+
+            <!-- Sidebar topics -->
+            <div class="mentor-topics">
+                <h4>📌 Quick Topics</h4>
+                <button class="topic-btn" onclick="quickAsk('How do I create a budget?')">
+                    💰 How to budget?
+                </button>
+                <button class="topic-btn" onclick="quickAsk('What is the best way to start saving?')">
+                    🏦 Start saving
+                </button>
+                <button class="topic-btn" onclick="quickAsk('How to start investing in India?')">
+                    📈 Investing basics
+                </button>
+                <button class="topic-btn" onclick="quickAsk('How to pay off debt fast?')">
+                    💳 Pay off debt
+                </button>
+                <button class="topic-btn" onclick="quickAsk('What is an emergency fund?')">
+                    🛡️ Emergency fund
+                </button>
+                <button class="topic-btn" onclick="quickAsk('What is a credit score and how to improve it?')">
+                    📊 Credit score
+                </button>
+
+                <div class="mentor-resources">
+                    <h4>📚 Resources</h4>
+                    <a href="/learning" class="resource-link">→ View Learning Path</a>
+                    <a href="/scenario" class="resource-link">→ Practice Scenarios</a>
+                    <!-- TODO: Add external resource links (RBI, SEBI financial education portals) -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Mentor chat logic is in script.js
+        // Function to pre-fill input from quick topic buttons
+        function quickAsk(question) {
+            document.getElementById('chat-input').value = question;
+            sendMessage();
+        }
+    </script>
+</body>
+</html>
